@@ -1,6 +1,8 @@
 package invtweaks;
 
+import com.mumfrey.liteloader.core.LiteLoader;
 import invtweaks.api.container.ContainerSection;
+import invtweaks.liteloader.accessor.IGuiContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -21,9 +23,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Mouse;
 
@@ -59,11 +58,11 @@ public class InvTweaksObfuscation {
     }
 
     public static int getDisplayWidth() {
-        return FMLClientHandler.instance().getClient().displayWidth;
+        return ((Minecraft) LiteLoader.getGameEngine().getClient()).displayWidth;
     }
 
     public static int getDisplayHeight() {
-        return FMLClientHandler.instance().getClient().displayHeight;
+        return ((Minecraft) LiteLoader.getGameEngine().getClient()).displayHeight;
     }
 
     public static boolean areItemStacksEqual(ItemStack itemStack1, ItemStack itemStack2) {
@@ -96,7 +95,6 @@ public class InvTweaksObfuscation {
         return slot.slotNumber;
     }
 
-    @SideOnly(Side.CLIENT)
     public static Slot getSlotAtMousePosition(GuiContainer guiContainer) {
         // Copied from GuiContainer
         if(guiContainer != null) {
@@ -116,29 +114,25 @@ public class InvTweaksObfuscation {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public static boolean getIsMouseOverSlot(GuiContainer guiContainer, Slot slot) {
         return getIsMouseOverSlot(guiContainer, slot, getMouseX(guiContainer), getMouseY(guiContainer));
     }
 
-    @SideOnly(Side.CLIENT)
     private static boolean getIsMouseOverSlot(GuiContainer guiContainer, Slot slot, int x, int y) {
         // Copied from GuiContainer
         if(guiContainer != null) {
-            x -= guiContainer.guiLeft;
-            y -= guiContainer.guiTop;
+            x -= ((IGuiContainer) guiContainer).getGuiLeft();
+            y -= ((IGuiContainer) guiContainer).getGuiTop();
             return x >= slot.xDisplayPosition - 1 && x < slot.xDisplayPosition + 16 + 1 && y >= slot.yDisplayPosition - 1 && y < slot.yDisplayPosition + 16 + 1;
         } else {
             return false;
         }
     }
 
-    @SideOnly(Side.CLIENT)
     private static int getMouseX(GuiContainer guiContainer) {
         return (Mouse.getEventX() * guiContainer.width) / getDisplayWidth();
     }
 
-    @SideOnly(Side.CLIENT)
     private static int getMouseY(GuiContainer guiContainer) {
         return guiContainer.height -
                 (Mouse.getEventY() * guiContainer.height) / getDisplayHeight() - 1;
@@ -254,11 +248,11 @@ public class InvTweaksObfuscation {
     }
 
     public int getKeyBindingForwardKeyCode() {
-        return getGameSettings().keyBindForward.keyCode;
+        return getGameSettings().keyBindForward.getKeyCode();
     }
 
     public int getKeyBindingBackKeyCode() {
-        return getGameSettings().keyBindBack.keyCode;
+        return getGameSettings().keyBindBack.getKeyCode();
     }
 
     public InventoryPlayer getInventoryPlayer() { // InventoryPlayer

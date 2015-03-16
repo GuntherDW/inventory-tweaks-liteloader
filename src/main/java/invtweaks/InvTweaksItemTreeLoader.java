@@ -1,7 +1,6 @@
 package invtweaks;
 
 import invtweaks.api.IItemTreeListener;
-import net.minecraftforge.common.MinecraftForge;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -55,7 +54,7 @@ public class InvTweaksItemTreeLoader extends DefaultHandler {
             }
         }
 
-        MinecraftForge.EVENT_BUS.register(tree);
+        // MinecraftForge.EVENT_BUS.register(tree);
 
         return tree;
     }

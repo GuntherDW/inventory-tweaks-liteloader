@@ -3,7 +3,7 @@ package invtweaks;
 import invtweaks.api.IItemTreeItem;
 import invtweaks.api.SortingMethod;
 import invtweaks.api.container.ContainerSection;
-import invtweaks.forge.InvTweaksMod;
+import invtweaks.liteloader.LiteModInvTweaks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -158,7 +158,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
             }
         }
 
-        InvTweaksMod.proxy.sortComplete();
+        LiteModInvTweaks.instance.sortComplete();
     }
 
     private void sortWithRules() {

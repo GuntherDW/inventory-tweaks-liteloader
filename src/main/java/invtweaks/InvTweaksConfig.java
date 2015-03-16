@@ -1,13 +1,9 @@
 package invtweaks;
 
 import invtweaks.api.IItemTreeItem;
-import invtweaks.forge.ClientProxy;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.List;
@@ -88,9 +84,9 @@ public class InvTweaksConfig {
             loadProperties();
             saveProperties(); // Needed to append non-saved properties to the file
 
-            if(tree != null) {
+            /* if(tree != null) {
                 MinecraftForge.EVENT_BUS.unregister(tree);
-            }
+            } */
             // Load tree
             tree = InvTweaksItemTreeLoader.load(treeFile);
 
@@ -397,7 +393,7 @@ public class InvTweaksConfig {
     }
 
     public int getSortKeyCode() {
-        return ClientProxy.KEYBINDING_SORT.getKeyCode();
+        return -1; // ClientProxy.KEYBINDING_SORT.getKeyCode();
     }
 
 }

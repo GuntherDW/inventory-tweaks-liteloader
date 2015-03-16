@@ -1,15 +1,13 @@
 package invtweaks;
 
 import invtweaks.api.container.ContainerSection;
-import invtweaks.forge.InvTweaksMod;
+import invtweaks.liteloader.LiteModInvTweaks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +40,6 @@ public class InvTweaksContainerManager/* extends InvTweaksObfuscation*/ {
      * @param mc Minecraft
      */
     @SuppressWarnings({"unchecked"})
-    @SideOnly(Side.CLIENT)
     public InvTweaksContainerManager(Minecraft mc) {
         GuiScreen currentScreen = mc.currentScreen;
         if(currentScreen instanceof GuiContainer) {
@@ -263,9 +260,8 @@ public class InvTweaksContainerManager/* extends InvTweaksObfuscation*/ {
         int slot = indexToSlot(section, index);
         if(slot != -1) {
             int data = (rightClick) ? 1 : 0;
-            InvTweaksMod.proxy
-                    .slotClick(InvTweaks.getInstance().getPlayerController(), container.windowId, slot, data, 0,
-                            InvTweaks.getInstance().getThePlayer());
+            LiteModInvTweaks.instance.slotClick(InvTweaks.getInstance().getPlayerController(), container.windowId, slot, data, 0,
+                                        InvTweaks.getInstance().getThePlayer());
         }
 
         if(clickDelay > 0) {

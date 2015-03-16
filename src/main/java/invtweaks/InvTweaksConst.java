@@ -2,7 +2,6 @@ package invtweaks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -63,7 +62,7 @@ public class InvTweaksConst {
     public static final int CHEST_ROW_SIZE = INVENTORY_ROW_SIZE;
     public static final int DISPENSER_ROW_SIZE = 3;
     public static final int INVENTORY_HOTBAR_SIZE = INVENTORY_ROW_SIZE;
-    public static final int DAMAGE_WILDCARD = OreDictionary.WILDCARD_VALUE;
+    public static final int DAMAGE_WILDCARD = -1; // OreDictionary.WILDCARD_VALUE;
 
     /**
      * Returns the Minecraft folder ensuring: - It is an absolute path - It ends with a folder separator

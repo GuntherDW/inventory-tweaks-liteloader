@@ -4,10 +4,6 @@ package invtweaks;
 import invtweaks.api.IItemTree;
 import invtweaks.api.IItemTreeCategory;
 import invtweaks.api.IItemTreeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
@@ -305,7 +301,7 @@ public class InvTweaksItemTree implements IItemTree {
 
     @Override
     public void registerOre(String category, String name, String oreName, int order) {
-        for(ItemStack i : OreDictionary.getOres(oreName)) {
+        /* for(ItemStack i : OreDictionary.getOres(oreName)) {
             if(i != null) {
                 // TODO: It looks like Mojang changed the internal name type to ResourceLocation. Evaluate how much of a pain that will be.
                 addItem(category,
@@ -313,23 +309,8 @@ public class InvTweaksItemTree implements IItemTree {
             } else {
                 log.warn(String.format("An OreDictionary entry for %s is null", oreName));
             }
-        }
+        } */
         oresRegistered.add(new OreDictInfo(category, name, oreName, order));
-    }
-
-    @SubscribeEvent
-    public void oreRegistered(OreDictionary.OreRegisterEvent ev) {
-        for(OreDictInfo ore : oresRegistered) {
-            if(ore.oreName.equals(ev.Name)) {
-                if(ev.Ore.getItem() != null) {
-                    // TODO: It looks like Mojang changed the internal name type to ResourceLocation. Evaluate how much of a pain that will be.
-                    addItem(ore.category, new InvTweaksItemTreeItem(ore.name, Item.itemRegistry.getNameForObject(ev.Ore.getItem()).toString(),
-                            ev.Ore.getItemDamage(), ore.order));
-                } else {
-                    log.warn(String.format("An OreDictionary entry for %s is null", ev.Name));
-                }
-            }
-        }
     }
 
     private class OreDictInfo {

@@ -4,7 +4,9 @@ import invtweaks.api.IItemTree;
 import invtweaks.api.IItemTreeItem;
 import invtweaks.api.SortingMethod;
 import invtweaks.api.container.ContainerSection;
-import invtweaks.forge.InvTweaksMod;
+import invtweaks.liteloader.LiteModInvTweaks;
+import invtweaks.liteloader.accessor.IGuiContainer;
+import invtweaks.liteloader.accessor.IGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -18,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.LWJGLException;
@@ -102,7 +103,7 @@ public class InvTweaks extends InvTweaksObfuscation {
 
         // Store instance
         instance = this;
-        isNEILoaded = Loader.isModLoaded("NotEnoughItems");
+        // isNEILoaded = Loader.isModLoaded("NotEnoughItems");
 
         // Load config files
         cfgManager = new InvTweaksConfigManager(mc);
@@ -312,7 +313,7 @@ public class InvTweaks extends InvTweaksObfuscation {
                 }
 
                 // Sync after pickup movements.
-                InvTweaksMod.proxy.sortComplete();
+                LiteModInvTweaks.instance.sortComplete();
 
             } else {
                 if(--itemPickupTimeout == 0) {
@@ -777,7 +778,7 @@ public class InvTweaks extends InvTweaksObfuscation {
             boolean customButtonsAdded = false;
 
             @SuppressWarnings("unchecked")
-            List<Object> controlList = guiContainer.buttonList;
+            List<Object> controlList = ((IGuiScreen) guiContainer).getButtonList();
             @SuppressWarnings("unchecked")
             List<Object> toRemove = new ArrayList<Object>();
             for(Object o : controlList) {
@@ -794,7 +795,7 @@ public class InvTweaks extends InvTweaksObfuscation {
                 }
             }
             controlList.removeAll(toRemove);
-            guiContainer.buttonList = controlList;
+            ((IGuiScreen) guiContainer).setButtonList(controlList);
 
             if(!customButtonsAdded) {
 
@@ -805,8 +806,8 @@ public class InvTweaks extends InvTweaksObfuscation {
                 // Inventory button
                 if(!isValidChest) {
                     controlList.add(new InvTweaksGuiSettingsButton(cfgManager, InvTweaksConst.JIMEOWAN_ID,
-                            guiContainer.guiLeft + guiContainer.xSize - 15,
-                            guiContainer.guiTop + 5, w, h, "...",
+                            ((IGuiContainer) guiContainer).getGuiLeft() + ((IGuiContainer) guiContainer).getXSize() - 15,
+                            ((IGuiContainer) guiContainer).getGuiTop() + 5, w, h, "...",
                             StatCollector.translateToLocal(
                                     "invtweaks.button.settings.tooltip"),
                             customTextureAvailable));
@@ -818,13 +819,13 @@ public class InvTweaks extends InvTweaksObfuscation {
                     chestAlgorithmClickTimestamp = 0;
 
                     int id = InvTweaksConst.JIMEOWAN_ID,
-                            x = guiContainer.guiLeft + guiContainer.xSize - 16,
-                            y = guiContainer.guiTop + 5;
+                            x = ((IGuiContainer) guiContainer).getGuiLeft() + ((IGuiContainer) guiContainer).getXSize() - 16,
+                            y = ((IGuiContainer) guiContainer).getGuiTop() + 5;
                     boolean isChestWayTooBig = isLargeChest(guiContainer.inventorySlots);
 
                     // NotEnoughItems compatibility
                     if(isChestWayTooBig && isNEIEnabled) {
-                        x = guiContainer.guiLeft + guiContainer.xSize - 35;
+                        x = ((IGuiContainer) guiContainer).getGuiLeft() + ((IGuiContainer) guiContainer).getXSize() - 35;
                         y += 50;
                     }
 
@@ -871,7 +872,7 @@ public class InvTweaks extends InvTweaksObfuscation {
             // Remove "..." button from non-survival tabs of the creative screen
             if(isGuiInventoryCreative(guiContainer)) {
                 @SuppressWarnings("unchecked")
-                List<Object> controlList = guiContainer.buttonList;
+                List<Object> controlList = ((IGuiScreen)guiContainer).getButtonList();
                 GuiButton buttonToRemove = null;
                 for(Object o : controlList) {
                     if(isGuiButton(o)) {
