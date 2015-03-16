@@ -1,6 +1,7 @@
 package invtweaks;
 
 import invtweaks.api.IItemTreeItem;
+import invtweaks.liteloader.LiteModInvTweaks;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
@@ -393,7 +394,7 @@ public class InvTweaksConfig {
     }
 
     public int getSortKeyCode() {
-        return -1; // ClientProxy.KEYBINDING_SORT.getKeyCode();
+        return LiteModInvTweaks.KEYBINDING_SORT.getKeyCode();
     }
 
 }

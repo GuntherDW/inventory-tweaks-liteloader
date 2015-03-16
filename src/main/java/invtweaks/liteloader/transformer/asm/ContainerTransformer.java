@@ -57,13 +57,20 @@ public class ContainerTransformer implements IClassTransformer {
 
     public static String get_CONTAINER_CLASS_INTERNAL() {
         if(obfType != ObfType.OBF)
-            return InvTweaksObf.cls_Container.name;
+            return InvTweaksObf.cls_Container.name.replace('.', '/');
         else
-            return InvTweaksObf.cls_Container.srg;
+            return InvTweaksObf.cls_Container.srg.replace('.', '/');
     }
 
     public static String getClassName(InvTweaksObf obf) {
         if(obfType != ObfType.OBF)
+            return obf.name.replace('.', '/');
+        else
+            return obf.srg.replace('.', '/');
+    }
+
+    public static String getSimpleClassName(InvTweaksObf obf) {
+        if (obfType != ObfType.OBF)
             return obf.name;
         else
             return obf.srg;
@@ -203,27 +210,27 @@ public class ContainerTransformer implements IClassTransformer {
     private void lateInit() {
         // TODO: ContainerCreative handling
         // Standard non-chest type
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerPlayer),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerPlayer),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerPlayerSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerMerchant), new ContainerInfo(true, true, false));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerRepair),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerMerchant), new ContainerInfo(true, true, false));
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerRepair),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerPlayerSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerHopper), new ContainerInfo(true, true, false));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerBeacon), new ContainerInfo(true, true, false));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerBrewingStand),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerHopper), new ContainerInfo(true, true, false));
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerBeacon), new ContainerInfo(true, true, false));
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerBrewingStand),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerBrewingSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerWorkbench),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerWorkbench),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerWorkbenchSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerEnchantment),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerEnchantment),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerEnchantmentSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerFurnace),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerFurnace),
                 new ContainerInfo(true, true, false, getVanillaSlotMapInfo("containerFurnaceSlots")));
 
         // Chest-type
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerDispenser),
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerDispenser),
                 new ContainerInfo(true, false, true, (short) 3,
                         getVanillaSlotMapInfo("containerChestDispenserSlots")));
-        standardClasses.put(getClassName(InvTweaksObf.cls_ContainerChest), new ContainerInfo(true, false, true,
+        standardClasses.put(getSimpleClassName(InvTweaksObf.cls_ContainerChest), new ContainerInfo(true, false, true,
                 getVanillaSlotMapInfo(
                         "containerChestDispenserSlots")));
 
@@ -278,7 +285,7 @@ public class ContainerTransformer implements IClassTransformer {
 
         // if("net.minecraft.inventory.Container".equals(transformedName)) {
         if(InvTweaksObf.cls_Container.matches(transformedName)) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: " + transformedName);
 
             transformBaseContainer(cn);
 
@@ -288,7 +295,7 @@ public class ContainerTransformer implements IClassTransformer {
 
         // if("net.minecraft.client.gui.inventory.ContainerCreative".equals(transformedName)) {
         if(InvTweaksObf.cls_ContainerCreative.matches(transformedName)) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             transformCreativeContainer(cn);
 
@@ -299,7 +306,7 @@ public class ContainerTransformer implements IClassTransformer {
         // Transform classes with explicitly specified information
         ContainerInfo info = standardClasses.get(transformedName);
         if(info != null) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             transformContainer(cn, info);
 
@@ -308,7 +315,7 @@ public class ContainerTransformer implements IClassTransformer {
         }
 
         if("invtweaks.InvTweaksObfuscation".equals(transformedName)) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             Type containertype = Type.getObjectType(containerClassName);
             for(MethodNode method : (List<MethodNode>) cn.methods) {
@@ -334,7 +341,7 @@ public class ContainerTransformer implements IClassTransformer {
 
         info = configClasses.get(transformedName);
         if(info != null) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             transformContainer(cn, info);
 
@@ -426,7 +433,7 @@ public class ContainerTransformer implements IClassTransformer {
 
         info = compatibilityClasses.get(transformedName);
         if(info != null) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             transformContainer(cn, info);
 
@@ -436,7 +443,7 @@ public class ContainerTransformer implements IClassTransformer {
 
         // if("net.minecraft.client.gui.GuiTextField".equals(transformedName)) {
         if(InvTweaksObf.cls_GuiTextField.matches(transformedName)) {
-            LiteLoaderLogger.getLogger().info("InvTweaks: %s", transformedName);
+            LiteLoaderLogger.getLogger().info("InvTweaks: "+transformedName);
 
             transformTextField(cn);
 

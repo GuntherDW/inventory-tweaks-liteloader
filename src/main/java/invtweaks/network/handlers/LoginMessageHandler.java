@@ -1,7 +1,6 @@
 package invtweaks.network.handlers;
 
 import invtweaks.InvTweaksConst;
-import invtweaks.forge.InvTweaksMod;
 import invtweaks.network.packets.ITPacketLogin;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

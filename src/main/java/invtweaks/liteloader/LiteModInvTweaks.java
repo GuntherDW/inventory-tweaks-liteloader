@@ -1,17 +1,15 @@
 package invtweaks.liteloader;
 
-import com.mumfrey.liteloader.Tickable;
+import com.mumfrey.liteloader.InitCompleteListener;
 import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
-import invtweaks.InvTweaks;
-import invtweaks.InvTweaksHandlerSorting;
-import invtweaks.InvTweaksItemTreeLoader;
-import invtweaks.InvTweaksObfuscation;
+import invtweaks.*;
 import invtweaks.api.IItemTreeListener;
 import invtweaks.api.InvTweaksAPI;
 import invtweaks.api.SortingMethod;
 import invtweaks.api.container.ContainerSection;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.settings.KeyBinding;
@@ -25,9 +23,10 @@ import java.io.File;
 /**
  * @author GuntherDW
  */
-public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
+public class LiteModInvTweaks implements InvTweaksAPI, InitCompleteListener {
 
     public static final KeyBinding KEYBINDING_SORT = new KeyBinding("invtweaks.key.sort", Keyboard.KEY_R, "invtweaks.key.category");
+    public static final KeyBinding KEYBINDING_SETTINGS = new KeyBinding("invtweaks.key.settings", Keyboard.KEY_SCROLL, "invtweaks.key.category");
     public boolean serverSupportEnabled = false;
     public boolean serverSupportDetected = false;
 
@@ -134,7 +133,7 @@ public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
      */
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock) {
-        if (clock) {
+        if (inGame && clock) {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.theWorld != null) {
                 if (mc.currentScreen != null) {
@@ -143,6 +142,13 @@ public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
                     invTweaksInstance.onTickInGame();
                 }
             }
+        }
+        if(KEYBINDING_SETTINGS.isPressed()) {
+            Minecraft mc = Minecraft.getMinecraft();
+            if(mc.currentScreen == null) {
+                mc.displayGuiScreen(new InvTweaksGuiSettings(new GuiIngameMenu()));
+            }
+
         }
     }
 
@@ -166,13 +172,10 @@ public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
     public void init(File configPath) {
         instance = this;
 
-        // Instantiate mod core
-        Minecraft mc = Minecraft.getMinecraft();
-        invTweaksInstance = new InvTweaks(mc);
-
         InvTweaks.log = LiteLoaderLogger.getLogger();
 
         LiteLoader.getInput().registerKeyBinding(KEYBINDING_SORT);
+        LiteLoader.getInput().registerKeyBinding(KEYBINDING_SETTINGS);
     }
 
     /**
@@ -197,6 +200,11 @@ public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
         return "InventoryTweaks LiteLoader";
     }
 
+    public void setServerAssistEnabled(boolean enabled) {
+        serverSupportEnabled = serverSupportDetected && enabled;
+        //InvTweaks.log.info("Server has support: " + serverSupportDetected + " support enabled: " + serverSupportEnabled);
+    }
+
     public void slotClick(PlayerControllerMP playerController, int windowId, int slot, int data, int action,
                           EntityPlayer player) {
         //int modiferKeys = (shiftHold) ? 1 : 0 /* XXX Placeholder */;
@@ -207,5 +215,17 @@ public class LiteModInvTweaks implements InvTweaksAPI, Tickable {
         } else { */
             playerController.windowClick(windowId, slot, data, action, player);
         /* } */
+    }
+
+    /**
+     * Called as soon as the game is initialised and the main game loop is running
+     *
+     * @param minecraft Minecraft instance
+     * @param loader    LiteLoader instance
+     */
+    @Override
+    public void onInitCompleted(Minecraft minecraft, LiteLoader loader) {
+        LiteLoaderLogger.getLogger().info("[InventoryTweaks] Initialising InventoryTweaks and loading configs!");
+        invTweaksInstance = new InvTweaks(minecraft);
     }
 }

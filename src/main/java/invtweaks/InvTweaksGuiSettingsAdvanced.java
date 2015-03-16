@@ -1,5 +1,6 @@
 package invtweaks;
 
+import invtweaks.liteloader.LiteModInvTweaks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -160,8 +161,8 @@ public class InvTweaksGuiSettingsAdvanced extends InvTweaksGuiSettingsAbstract {
             // Toggle server assistance
             case ID_SERVER_ASSIST:
                 toggleBooleanButton(guibutton, InvTweaksConfig.PROP_ENABLE_SERVER_ITEMSWAP, labelServerAssist);
-                /* InvTweaksMod.proxy.setServerAssistEnabled(!InvTweaks.getConfigManager().getConfig().getProperty(
-                        InvTweaksConfig.PROP_ENABLE_SERVER_ITEMSWAP).equals(InvTweaksConfig.VALUE_FALSE)); */
+                LiteModInvTweaks.instance.setServerAssistEnabled(!InvTweaks.getConfigManager().getConfig().getProperty(
+                    InvTweaksConfig.PROP_ENABLE_SERVER_ITEMSWAP).equals(InvTweaksConfig.VALUE_FALSE));
                 break;
 
 

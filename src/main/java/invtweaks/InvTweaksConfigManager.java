@@ -234,7 +234,7 @@ public class InvTweaksConfigManager {
             }
         } catch(IOException e) {
             InvTweaks.logInGameStatic("[15] The mod won't work, because " + resource + " extraction failed!");
-
+            e.printStackTrace();
             log.error("Cannot extract " + resource + " file: " + e.getMessage());
             return false;
         }
