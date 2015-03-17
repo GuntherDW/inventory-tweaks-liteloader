@@ -163,14 +163,14 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
 
     private void sortWithRules() {
         //// Apply rules
-        log.info("Applying rules.");
+        log.debug("Applying rules.");
 
         // Sorts rule by rule, themselves being already sorted by decreasing priority
         for(InvTweaksConfigSortingRule rule : rules) {
             int rulePriority = rule.getPriority();
 
             if(log.isEnabled(InvTweaksConst.DEBUG)) {
-                log.info("Rule : " + rule.getKeyword() + "(" + rulePriority + ")");
+                log.debug("Rule : " + rule.getKeyword() + "(" + rulePriority + ")");
             }
 
             // For every item in the inventory
@@ -220,7 +220,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
         }
 
         //// Don't move locked stacks
-        log.info("Locking stacks.");
+        log.debug("Locking stacks.");
 
         for(int i = 0; i < size; i++) {
             if(hasToBeMoved(i, 1) && lockPriorities[i] > 0) {
@@ -231,7 +231,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
 
     private void sortInventory(InvTweaksContainerManager globalContainer) {
         //// Move items out of the crafting slots
-        log.info("Handling crafting slots.");
+        log.debug("Handling crafting slots.");
         if(globalContainer.hasSection(ContainerSection.CRAFTING_IN)) {
             List<Slot> craftingSlots = globalContainer.getSlots(ContainerSection.CRAFTING_IN);
             int emptyIndex = globalContainer.getFirstEmptyIndex(ContainerSection.INVENTORY);
@@ -256,7 +256,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
     private void sortMergeArmor(InvTweaksContainerManager globalContainer) {
         //// Merge stacks to fill the ones in locked slots
         //// + Move armor parts to the armor slots
-        log.info("Merging stacks.");
+        log.debug("Merging stacks.");
         for(int i = size - 1; i >= 0; i--) {
             ItemStack from = containerMgr.getItemStack(i);
             if(from != null) {
@@ -330,7 +330,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
     }
 
     private void sortEvenStacks() {
-        log.info("Distributing items.");
+        log.debug("Distributing items.");
 
         //item and slot counts for each unique item
         HashMap<Pair<String, Integer>, int[]> itemCounts = new HashMap<Pair<String, Integer>, int[]>();
@@ -411,7 +411,7 @@ public class InvTweaksHandlerSorting extends InvTweaksObfuscation {
     }
 
     private void defaultSorting() {
-        log.info("Default sorting.");
+        log.debug("Default sorting.");
 
         ArrayList<Integer> remaining = new ArrayList<Integer>(), nextRemaining = new ArrayList<Integer>();
         for(int i = 0; i < size; i++) {

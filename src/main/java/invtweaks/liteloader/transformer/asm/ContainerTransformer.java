@@ -1,11 +1,12 @@
 package invtweaks.liteloader.transformer.asm;
 
+import com.mumfrey.liteloader.transformers.event.MethodInfo;
 import com.mumfrey.liteloader.util.ObfuscationUtilities;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 import invtweaks.liteloader.obf.InvTweaksObf;
+import invtweaks.liteloader.transformer.asm.compatibility.ASMMethodInfo;
 import invtweaks.liteloader.transformer.asm.compatibility.CompatibilityConfigLoader;
 import invtweaks.liteloader.transformer.asm.compatibility.ContainerInfo;
-import invtweaks.liteloader.transformer.asm.compatibility.MethodInfo;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.util.BlockPos;
 import org.objectweb.asm.ClassReader;
@@ -53,25 +54,26 @@ public class ContainerTransformer implements IClassTransformer {
             obfType = ObfType.OBF;
         else
             obfType = ObfuscationUtilities.fmlIsPresent() ? ObfType.FML : ObfType.MCP;
+        LiteLoaderLogger.getLogger().info("[InventoryTweaks] ObfType detected : "+obfType);
     }
 
     public static String get_CONTAINER_CLASS_INTERNAL() {
-        if(obfType != ObfType.OBF)
-            return InvTweaksObf.cls_Container.name.replace('.', '/');
+        if(obfType == ObfType.OBF)
+            return InvTweaksObf.cls_Container.obf.replace('.', '/');
         else
             return InvTweaksObf.cls_Container.srg.replace('.', '/');
     }
 
     public static String getClassName(InvTweaksObf obf) {
-        if(obfType != ObfType.OBF)
-            return obf.name.replace('.', '/');
+        if(obfType == ObfType.OBF)
+            return obf.obf.replace('.', '/');
         else
             return obf.srg.replace('.', '/');
     }
 
     public static String getSimpleClassName(InvTweaksObf obf) {
-        if (obfType != ObfType.OBF)
-            return obf.name;
+        if (obfType == ObfType.OBF)
+            return obf.obf;
         else
             return obf.srg;
     }
@@ -160,8 +162,7 @@ public class ContainerTransformer implements IClassTransformer {
 
     private static void transformTextField(ClassNode clazz) {
 
-        com.mumfrey.liteloader.transformers.event.MethodInfo func_146195_b =
-            new com.mumfrey.liteloader.transformers.event.MethodInfo(InvTweaksObf.cls_GuiTextField, InvTweaksObf.mthd_setFocused, Void.TYPE, Boolean.TYPE);
+        MethodInfo func_146195_b = new MethodInfo(InvTweaksObf.cls_GuiTextField, InvTweaksObf.mthd_setFocused, Void.TYPE, Boolean.TYPE);
 
         for(MethodNode method : (List<MethodNode>) clazz.methods) {
 
@@ -192,16 +193,16 @@ public class ContainerTransformer implements IClassTransformer {
         }
     }
 
-    public static MethodInfo getCompatiblitySlotMapInfo(String name) {
+    public static ASMMethodInfo getCompatiblitySlotMapInfo(String name) {
         return getSlotMapInfo(Type.getObjectType(SLOT_MAPS_MODCOMPAT_CLASS), name, true);
     }
 
-    public static MethodInfo getVanillaSlotMapInfo(String name) {
+    public static ASMMethodInfo getVanillaSlotMapInfo(String name) {
         return getSlotMapInfo(Type.getObjectType(SLOT_MAPS_VANILLA_CLASS), name, true);
     }
 
-    public static MethodInfo getSlotMapInfo(Type mClass, String name, boolean isStatic) {
-        return new MethodInfo(
+    public static ASMMethodInfo getSlotMapInfo(Type mClass, String name, boolean isStatic) {
+        return new ASMMethodInfo(
                 Type.getMethodType(Type.getObjectType("java/util/Map"), Type.getObjectType(containerClassName)), mClass,
                 name, isStatic);
     }
@@ -379,14 +380,14 @@ public class ContainerTransformer implements IClassTransformer {
                         MethodNode row_method = findAnnotatedMethod(cn, ANNOTATION_CHEST_CONTAINER_ROW_CALLBACK);
 
                         if(row_method != null) {
-                            apiInfo.rowSizeMethod = new MethodInfo(Type.getMethodType(row_method.desc),
+                            apiInfo.rowSizeMethod = new ASMMethodInfo(Type.getMethodType(row_method.desc),
                                     Type.getObjectType(cn.name), row_method.name);
                         }
 
                         MethodNode large_method = findAnnotatedMethod(cn, ANNOTATION_CHEST_CONTAINER_LARGE_CALLBACK);
 
                         if(large_method != null) {
-                            apiInfo.largeChestMethod = new MethodInfo(Type.getMethodType(large_method.desc),
+                            apiInfo.largeChestMethod = new ASMMethodInfo(Type.getMethodType(large_method.desc),
                                     Type.getObjectType(cn.name), large_method.name);
                         }
                     } else if(ANNOTATION_INVENTORY_CONTAINER.equals(annotation.desc)) {
@@ -418,7 +419,7 @@ public class ContainerTransformer implements IClassTransformer {
                         MethodNode method = findAnnotatedMethod(cn, ANNOTATION_CONTAINER_SECTION_CALLBACK);
 
                         if(method != null) {
-                            apiInfo.slotMapMethod = new MethodInfo(Type.getMethodType(method.desc),
+                            apiInfo.slotMapMethod = new ASMMethodInfo(Type.getMethodType(method.desc),
                                     Type.getObjectType(cn.name), method.name);
                         }
 

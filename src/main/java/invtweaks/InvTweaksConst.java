@@ -53,7 +53,7 @@ public class InvTweaksConst {
     // Global mod constants
     public static final String INGAME_LOG_PREFIX = "InvTweaks: ";
     public static final Level DEFAULT_LOG_LEVEL = Level.WARN;
-    public static final Level DEBUG = Level.INFO;
+    public static final Level DEBUG = Level.DEBUG;
     public static final int JIMEOWAN_ID = 54696386; // Used in GUIs
 
     // Minecraft constants

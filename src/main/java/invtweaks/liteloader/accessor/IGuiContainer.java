@@ -12,15 +12,8 @@ import invtweaks.liteloader.obf.InvTweaksObf;
 public interface IGuiContainer {
 
     @Accessor("fld_guiLeft") public abstract int getGuiLeft();
-    @Accessor("fld_guiLeft") public abstract int setGuiLeft(int guiLeft);
-
     @Accessor("fld_guiTop")  public abstract int getGuiTop();
-    @Accessor("fld_guiTop")  public abstract int setGuiTop(int guiTop);
-
     @Accessor("fld_xSize")   public abstract int getXSize();
-    @Accessor("fld_xSize")   public abstract int setXSize(int xSize);
-
     @Accessor("fld_ySize")   public abstract int getYSize();
-    @Accessor("fld_ySize")   public abstract int setYSize(int ySize);
 
 }

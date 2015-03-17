@@ -223,7 +223,6 @@ public class InvTweaks extends InvTweaksObfuscation {
                 return;
             }
 
-            System.out.println("Sorting!");
             // Check current GUI
             GuiScreen guiScreen = getCurrentScreen();
             if(guiScreen == null || (guiScreen instanceof GuiContainer && (isValidChest(

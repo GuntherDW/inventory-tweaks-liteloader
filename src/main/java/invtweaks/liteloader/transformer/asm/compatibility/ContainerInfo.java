@@ -9,9 +9,9 @@ public class ContainerInfo {
     public boolean validChest = false;
     public boolean largeChest = false;
     public short rowSize = 9;
-    public MethodInfo slotMapMethod = ContainerTransformer.getVanillaSlotMapInfo("unknownContainerSlots");
-    public MethodInfo rowSizeMethod = null;
-    public MethodInfo largeChestMethod = null;
+    public ASMMethodInfo slotMapMethod = ContainerTransformer.getVanillaSlotMapInfo("unknownContainerSlots");
+    public ASMMethodInfo rowSizeMethod = null;
+    public ASMMethodInfo largeChestMethod = null;
 
     public ContainerInfo() {
     }
@@ -29,7 +29,7 @@ public class ContainerInfo {
         largeChest = largeCh;
     }
 
-    public ContainerInfo(boolean standard, boolean validInv, boolean validCh, MethodInfo slotMap) {
+    public ContainerInfo(boolean standard, boolean validInv, boolean validCh, ASMMethodInfo slotMap) {
         showButtons = standard;
         validInventory = validInv;
         validChest = validCh;
@@ -51,7 +51,7 @@ public class ContainerInfo {
         rowSize = rowS;
     }
 
-    public ContainerInfo(boolean standard, boolean validInv, boolean validCh, short rowS, MethodInfo slotMap) {
+    public ContainerInfo(boolean standard, boolean validInv, boolean validCh, short rowS, ASMMethodInfo slotMap) {
         showButtons = standard;
         validInventory = validInv;
         validChest = validCh;

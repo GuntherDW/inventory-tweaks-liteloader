@@ -159,7 +159,10 @@ public class LiteModInvTweaks implements InvTweaksAPI, InitCompleteListener {
      */
     @Override
     public String getVersion() {
-        return "0.1";
+        String version = LiteLoader.getInstance().getModMetaData(this, "version", "");
+        String build = LiteLoader.getInstance().getModMetaData(this, "revision", "");
+
+        return version + (!(build.equals("")) ? " (build: "+build+")" : "");
     }
 
     /**

@@ -1,0 +1,12 @@
+{
+  "name" : "InventoryTweaks-LiteLoader",
+  "author": "TweakCraft",
+  "description": "InventoryTweaks port to LiteLoader",
+  "version": "1.0",
+  "revision": "MCP",
+  "mcversion": "1.8.0",
+  "classTransformerClasses" : [
+    "invtweaks.liteloader.transformer.InvTweaksAccessTransformer",
+    "invtweaks.liteloader.transformer.asm.ContainerTransformer"
+  ]
+}
